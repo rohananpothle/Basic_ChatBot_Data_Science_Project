@@ -59,7 +59,7 @@ def chatbot_pipeline(file):
 
     # Train-Test Split
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    
+
     results = ""
     models = {}
 
@@ -72,8 +72,7 @@ def chatbot_pipeline(file):
         for name, model in classifiers.items():
             model.fit(X_train, y_train)
             acc = accuracy_score(y_test, model.predict(X_test))
-            results += f"{name} Accuracy: {acc:.4f}
-"
+            results += f"{name} Accuracy: {acc:.4f}\n"
             models[name] = model
 
     elif task_type == "regression":
@@ -85,16 +84,13 @@ def chatbot_pipeline(file):
         for name, model in regressors.items():
             model.fit(X_train, y_train)
             r2 = r2_score(y_test, model.predict(X_test))
-            results += f"{name} R2 Score: {r2:.4f}
-"
+            results += f"{name} R2 Score: {r2:.4f}\n"
             models[name] = model
 
     else:
         model = KMeans(n_clusters=3)
         model.fit(X)
-        results += f"KMeans Cluster Centers:
-{model.cluster_centers_}
-"
+        results += f"KMeans Cluster Centers:\n{model.cluster_centers_}\n"
         models["KMeans"] = model
 
     # Save all models
@@ -105,6 +101,7 @@ def chatbot_pipeline(file):
 
     return results
 
+
 gr.Interface(
     fn=chatbot_pipeline,
     inputs=gr.File(label="Upload Your Dataset (CSV Only)"),
@@ -112,4 +109,3 @@ gr.Interface(
     title="🧠 AI Data Science Chatbot",
     description="Upload a CSV file and get model analysis, training, and results!"
 ).launch()
-
